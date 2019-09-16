@@ -8,7 +8,7 @@ The data are extremely sparse, which means that many customers have only rated a
 # Parameters
 - eeta: step size
 - l: penalization factor to prevent overfitting
-- n_naive: how many times must a customer must appear in the training set before we apply matrix factorization for this specfic customer. 
+- n_naive: how many times must a customer must appear in the training set before we apply matrix factorization for this specfic customer.    It is generally a good idea to leave the customers that appear only once (n_naive = 2). 
 - k: the dimensionality of matrix factorization
 - iterations: how many times the training set is iterated over 
 
