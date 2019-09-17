@@ -185,6 +185,6 @@ plt.xlabel('Iterations', size = 12)
 
 plt.legend()
 
-plt.savefig('Training_error1.png')
+plt.savefig('Error1.png')
 
 
