@@ -5,7 +5,7 @@ This code contains a recommendation system for the Yelp dataset review data: htt
 
 The data are extremely sparse, which means that many customers have only rated a few places. Many of the customers that are found in the test set, do not appear in the training data. To circumvent this, we alter our approach. We introduce a new variable (n_naive), which indicates how many times a customer must appear in the training data before we just plug in the grand mean as the prediction for this customer. In a similar way the grand mean is used for unseen customers (customers that appear in the test set, but not in the training set). 
 
-The test error is lower than the training error. This happens due to a more frequent imputation of the global mean in the test set than in the training set. The training error relies more on the matrix factorization process than the test error. The sparsity of the data is a problem here. 
+The test error is lower than the training error for n_naive larger than 1. This happens due to a more frequent imputation of the global mean in the test set than in the training set. The training error relies more on the matrix factorization process than the test error. The sparsity of the data is a problem here. 
 
 # Parameters
 - eeta: step size
