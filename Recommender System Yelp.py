@@ -2,20 +2,19 @@ import numpy as np
 import math 
 import matplotlib.pyplot as plt
 from sklearn.model_selection import KFold
-import time
 import pandas as pd
 import statistics
 import csv
 
 
 #Load data
-ratings2 = np.genfromtxt("Enter location", usecols=(1, 2, 3), delimiter=';', dtype='int')
+ratings2 = np.genfromtxt("C:/Users/Niek/Desktop/Yelp/Review.csv", usecols=(1, 2, 3), delimiter=';', dtype='int')
+ratings2 = np.delete(ratings2, 0, axis=0)
 
 #Start Cross-Validation
 np.random.seed(1234)
-F = KFold(n_splits=2, shuffle=True)
+F = KFold(n_splits=5, shuffle=True)
 dat = F.split(ratings2)
-fold = 1
 
 #Train data, step size, penalization, test data, number of times customer must appear in data before we apply MF, dimensionality (parameters)
 def matrix_factorization_train(data, eeta, l, test, n_naive, k, iterations): #Train data, step size, penalization, test data, num
@@ -59,7 +58,7 @@ def matrix_factorization_train(data, eeta, l, test, n_naive, k, iterations): #Tr
                 k = int(rating[4]-1)
                 r = rating[2]
                 pred = np.dot(c_mat[j, :], r_mat[:, k])
-                error = r - pred 
+                error = r - pred if r > 0 else 0
                 
                 #calculate gradients
                 c_gradient = c_mat[j, :] + eeta * (2 * error * r_mat[:, k] - l * c_mat[j, :])
@@ -121,13 +120,11 @@ def my_main():
 
     print("Start of the matrix factorisation")
     
-    #Time and get hyperparameters ready
-    t = time.time()
     fold = 1
     eeta = 0.01 #step size
     l = 0.005 #penalization factor
     k = 10 #parameters
-    N = 6 #naive
+    N = 3 #naive
     iterations = 20
     
     mf_mse = []
@@ -137,19 +134,15 @@ def my_main():
     for train, test in dat:
 
         print("Fold:", fold)
-        start_time = time.time()
         matrix = matrix_factorization_train(ratings2[train], eeta, l, test, N, k, iterations)
-        print('Time to train fold: ' + str(time.time() - start_time) + " seconds")
         fold += 1
  
         mf_mse.append(matrix[2])   
         mf_test_mse.append(matrix[3])
         
         print("The RMSE of the matrix factorisation:")
- 
-        print("\n")
-     
-    print('Overall time: ' + str(time.time() - t) + " seconds")
+  
+
     return([mf_mse, mf_test_mse, iterations])
 
 
@@ -160,17 +153,17 @@ mse1 = outcome[0]
 mse2 = outcome[1]
 
 #save Data
-with open("mse.csv", "w") as f:
+with open("rmse_train.csv", "w") as f:
     writer = csv.writer(f)
     writer.writerows(mse1)
 
-with open("rmse.csv", "w") as f:
+with open("rmse_test.csv", "w") as f:
     wr = csv.writer(f)
     wr.writerow(mse2)
         
 #Average over all folds
-mean_mse1 = [statistics.mean(k) for k in zip(mse1[0],mse1[1])]
-mean_mse2 = [statistics.mean(k) for k in zip(mse2[0],mse2[1])]
+mean_mse1 = [statistics.mean(k) for k in zip(mse1[0],mse1[1], mse1[2], mse1[3], mse1[4])]
+mean_mse2 = [statistics.mean(k) for k in zip(mse2[0],mse2[1], mse2[2], mse2[3], mse2[4])]
 
 
 df=pd.DataFrame({'x': range(2, outcome[2] + 1),  'Training RMSE': mean_mse1[1:outcome[2]], 'Test RMSE': mean_mse2[1:outcome[2]]})
@@ -184,6 +177,6 @@ plt.xlabel('Iterations', size = 12)
 
 plt.legend()
 
-plt.savefig('Error1.png')
+plt.savefig('Training_error1.png')
 
 
