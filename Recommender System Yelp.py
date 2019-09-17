@@ -9,7 +9,7 @@ import csv
 
 
 #Load data
-ratings2 = np.genfromtxt("C:/Users/Niek/Desktop/Yelp/New_review.csv", usecols=(1, 2, 3), delimiter=',', dtype='int')
+ratings2 = np.genfromtxt("Enter location", usecols=(1, 2, 3), delimiter=';', dtype='int')
 ratings2 = np.delete(ratings2, 0, axis=0)
 
 #Start Cross-Validation
