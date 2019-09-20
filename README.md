@@ -1,4 +1,4 @@
-# Recomender-System
+# Recommender-System
 Recommender System
 
 This code contains a recommendation system for the Yelp dataset review data: https://www.kaggle.com/yelp-dataset/yelp-dataset. It uses matrix factorization and a simple gradient descent update rule. It uses cross-validation to verify the results. 
